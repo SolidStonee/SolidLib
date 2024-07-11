@@ -12,6 +12,7 @@ namespace SolidLib.Registry
             if (_registry.ContainsKey(name))
             {
                 SolidLib.Log.LogWarning($"[Registry] Registry with name {name} is already registered.");
+                return;
             }
             _registry[name] = key;
         }

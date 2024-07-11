@@ -21,14 +21,17 @@ namespace SolidLib.Utils.AssetLoading
 
         public AssetBundleLoader(string filePath, bool registerNetworkPrefabs = true, bool fixMixerGroups = true)
         {
+
             bool alreadyExists = LoadedBundles.TryGetValue(filePath, out var bundle);
+            
+            SolidLib.LogExtended($"[AssetBundle Loading] AlreadyExists: {alreadyExists}");
             
             if (!alreadyExists)
             {
                 bundle = AssetBundle.LoadFromFile(filePath);
                 if (bundle == null)
                 {
-                    SolidLib.Log.LogDebug($"[AssetBundle Loading] Asset bundle {filePath} was empty, Cancelling.");
+                    SolidLib.Log.LogWarning($"[AssetBundle Loading] Asset bundle {filePath} was empty, Cancelling.");
                     return;
                 }
                 LoadedBundles.Add(filePath, bundle);
@@ -43,7 +46,7 @@ namespace SolidLib.Utils.AssetLoading
 
             if (alreadyExists)
             {
-                SolidLib.Log.LogDebug("Skipping registering stuff as this bundle has already been loaded");
+                SolidLib.Log.LogDebug($"Skipping registering stuff as {bundle.name} has already been loaded");
                 return;
             }
             foreach (AudioClip clip in bundle.LoadAllAssets<AudioClip>())
@@ -60,8 +63,7 @@ namespace SolidLib.Utils.AssetLoading
                     Utilities.FixMixerGroups(gameObject);
                     SolidLib.LogExtended($"[AssetBundle Loading] Fixed Mixer Groups: {gameObject.name}");
                 }
-                if (!Registries.GameObjectRegistry.Contains(gameObject.name))
-                    Registries.GameObjectRegistry.Register(gameObject.name, gameObject);
+                Registries.GameObjectRegistry.Register(gameObject.name, gameObject);
                 if (!registerNetworkPrefabs || gameObject.GetComponent<NetworkObject>() == null) continue;
                 NetworkPrefabs.RegisterNetworkPrefab(gameObject);
                 SolidLib.LogExtended($"[AssetBundle Loading] Registered Network Prefab: {gameObject.name}");
@@ -69,14 +71,23 @@ namespace SolidLib.Utils.AssetLoading
             }
             foreach (Item item in bundle.LoadAllAssets<Item>())
             {
-                if (!registerNetworkPrefabs || item.spawnPrefab.GetComponent<NetworkObject>() == null) continue;
-                NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
-                SolidLib.LogExtended($"[AssetBundle Loading] Registered Network Prefab: {item.name}");
+                try
+                {
+                    if (!registerNetworkPrefabs || item.spawnPrefab.GetComponent<NetworkObject>() == null) continue;
+                    NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
+                    SolidLib.LogExtended($"[AssetBundle Loading] Registered Network Prefab: {item.name}");
+                }
+                catch(Exception e)
+                {
+                    SolidLib.Log.LogError(e + $"\n\n There was an error loading the item: {item.name}, Is your spawnprefab null or is it something else?");
+                }
+                
             }
         }
 
         public static AssetBundleLoader LoadBundleFromFile(string filePath)
         {
+            SolidLib.LogExtended("Start Loading bundle");
             return new AssetBundleLoader(filePath);
         }
         
