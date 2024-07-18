@@ -113,8 +113,19 @@ namespace SolidLib
                 Log.LogInfo(log);
         }
 
+        private int materialCount = 0;
+
         private void LoadAllIngameAssetsIntoRegistry()
         {
+            
+            /*
+            foreach (UnityEngine.Object go in Resources.FindObjectsOfTypeAll(typeof(UnityEngine.Object)) as UnityEngine.Object[])
+            {
+                GameObject cGO = go as GameObject;
+                if (cGO != null && !EditorUtility.IsPersistent(cGO.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                    
+            }
+            
             GameObject[] allGameObjects = Resources.FindObjectsOfTypeAll<GameObject>();
             foreach (GameObject gameObject in allGameObjects)
             {
@@ -128,8 +139,17 @@ namespace SolidLib
             Material[] allMaterials = Resources.FindObjectsOfTypeAll<Material>();
             foreach (Material material in allMaterials)
             {
+                //Filter Unneeded shiat
+                
+                
                 Registries.MaterialRegistry.Register(material.name, material);
+                
+                materialCount++;
+                LogExtended($"Registered Material {name}");
             }
+            
+            LogExtended($"Registered {materialCount} materials on startup");
+            */
             
         }
 
