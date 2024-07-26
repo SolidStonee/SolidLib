@@ -29,6 +29,11 @@ namespace SolidLib.Registry
             foreach (var config in itemConfigs)
             {
                 var item = AssetLoader.Load<Item>(bundle, config.AssetName);
+                if (item == null)
+                {
+                    SolidLib.Log.LogInfo("item is null " + config.AssetName + " this wont be registered");
+                    return;
+                }
                 SolidLib.Log.LogInfo(item.name);
                 Registries.ItemRegistry.Register(config.Name, item);
                 TerminalNode? terminalNode = null;
