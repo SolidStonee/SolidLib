@@ -18,10 +18,7 @@ namespace SolidLib.Patches
         {
             API_MoonMusic music = GameObject.FindAnyObjectByType<API_MoonMusic>();
 
-            FieldInfo timeSincePlayingLastMusicField = AccessTools.Field(typeof(SoundManager), "timeSincePlayingLastMusic");
-            float timeSincePlayingLastMusic = (float)timeSincePlayingLastMusicField.GetValue(__instance);
-
-            if (timeSincePlayingLastMusic > 200f)
+            if (__instance.timeSincePlayingLastMusic > 200f)
             {
                 if(music != null)
                 {
@@ -56,8 +53,7 @@ namespace SolidLib.Patches
                 
                 __instance.musicSource.Play();
                 __instance.playingOutsideMusic = true;
-                timeSincePlayingLastMusic = 0f;
-                timeSincePlayingLastMusicField.SetValue(__instance, timeSincePlayingLastMusic);
+                __instance.timeSincePlayingLastMusic = 0f;
             }
             return false;
         }

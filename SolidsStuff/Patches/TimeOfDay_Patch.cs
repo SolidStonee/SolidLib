@@ -8,24 +8,15 @@ using UnityEngine;
 
 namespace SolidLib.Patches
 {
-    [HarmonyPatch(typeof(TimeOfDay))]
     internal class TimeOfDay_Patch
     {
-        static MethodBase TargetMethod()
-        {
-            return AccessTools.Method(typeof(TimeOfDay), "PlayerSeesNewTimeOfDay");
-        }
-
+        [HarmonyPatch(nameof(TimeOfDay.PlayerSeesNewTimeOfDay))]
         [HarmonyPrefix]
-        public static bool PrefixMethod(TimeOfDay __instance)
+        public static bool SeesNewTimeOfDay_Patch(TimeOfDay __instance)
         {
             if (!GameNetworkManager.Instance.localPlayerController.isInsideFactory && !GameNetworkManager.Instance.localPlayerController.isInHangarShipRoom && __instance.playersManager.shipHasLanded)
             {
-
-                FieldInfo dayModeLastTimePlayerWasOutsideField = AccessTools.Field(typeof(TimeOfDay), "dayModeLastTimePlayerWasOutside");
-                DayMode dayModeLastTimePlayerWasOutside = (DayMode)dayModeLastTimePlayerWasOutsideField.GetValue(__instance);
-                dayModeLastTimePlayerWasOutside = __instance.dayMode;
-                dayModeLastTimePlayerWasOutsideField.SetValue(__instance, dayModeLastTimePlayerWasOutside);
+                __instance.dayModeLastTimePlayerWasOutside = __instance.dayMode;
                 HUDManager.Instance.SetClockIcon(__instance.dayMode);
                 if (__instance.currentLevel.planetHasTime)
                 {
