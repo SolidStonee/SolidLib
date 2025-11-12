@@ -41,12 +41,9 @@ namespace SolidLib
             Log.LogInfo($"Initializing Library");
             
             BoundConfig = new LibConfig(base.Config);
-            
-            InitializeNetworkBehaviours();
 
             Registries.InitRegistries();
-            
-            LoadAllIngameAssetsIntoRegistry();
+            //LoadAllIngameAssetsIntoRegistry();
 
             solidLibBundle = BundleUtils.LoadBundleFromInternalAssembly("solidlibassets");
 
@@ -54,57 +51,6 @@ namespace SolidLib
             NetworkPrefabs.RegisterNetworkPrefab(UtilsPrefab); //make sure to register the utils
 
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            //these were to just test
-            // var itemConfigs = new List<ItemConfig>
-            // {
-            //     new ItemConfig
-            //     {
-            //         Name = "Grape",
-            //         AssetName = "GrapeObj.asset",
-            //         Enabled = true,
-            //         IsShopItem = false,
-            //         SpawnWeights = "Modded:80,Vanilla:80",
-            //
-            //     },
-            //     new ItemConfig
-            //     {
-            //         Name = "Glue",
-            //         AssetName = "GlueObj.asset",
-            //         Enabled = true,
-            //         IsShopItem = true,
-            //         SpawnWeights = "Modded:80,Vanilla:80",
-            //         ItemCost = 2,
-            //     }
-            // };
-            //
-            // var enemyConfigs = new List<EnemyConfig>
-            // {
-            //     new EnemyConfig
-            //     {
-            //         Name = "Duck",
-            //         AssetName = "DuckEnemyType.asset",
-            //         Enabled = true,
-            //         MaxSpawnCount = 1,
-            //         PowerLevel = 1,
-            //         SpawnWeights = "Modded:50,Vanilla:80"
-            //     }
-            // };
-            //
-            //  var mapObjectConfigs = new List<MapObjectConfig>
-            //  {
-            //      new MapObjectConfig
-            //      {
-            //          Name = "SeaMine",
-            //          AssetName = "Seamine",
-            //          Enabled = true,
-            //          SpawnAmount = 10,
-            //          Outside = false
-            //      }
-            //  };
-            
-            // Initialize registries
-            // ItemInitializer.Initialize(bundle, itemConfigs);
-            // MapObjectInitializer.Initialize(bundle, mapObjectConfigs);
         }
 
         public static void LogExtended(object log)
@@ -115,8 +61,8 @@ namespace SolidLib
 
         private int materialCount = 0;
 
-        private void LoadAllIngameAssetsIntoRegistry()
-        {
+        // private void LoadAllIngameAssetsIntoRegistry()
+        // {
             
             /*
             foreach (UnityEngine.Object go in Resources.FindObjectsOfTypeAll(typeof(UnityEngine.Object)) as UnityEngine.Object[])
@@ -151,24 +97,9 @@ namespace SolidLib
             LogExtended($"Registered {materialCount} materials on startup");
             */
             
-        }
+        //}
 
-        private static void InitializeNetworkBehaviours()
-        {
-            var types = Assembly.GetExecutingAssembly().GetTypes();
-            foreach (var type in types)
-            {
-                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                foreach (var method in methods)
-                {
-                    var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
-                    if (attributes.Length > 0)
-                    {
-                        method.Invoke(null, null);
-                    }
-                }
-            }
-        }
+        
 
     }
 }

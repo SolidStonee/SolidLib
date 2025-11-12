@@ -42,8 +42,10 @@ namespace SolidLib.Registry
             if (config.Outside)
             {
                 SpawnableOutsideObjectDef mapObjectDef = ScriptableObject.CreateInstance<SpawnableOutsideObjectDef>();
-                mapObjectDef.spawnableMapObject = new SpawnableOutsideObjectWithRarity();
-                mapObjectDef.spawnableMapObject.spawnableObject = new SpawnableOutsideObject();
+                mapObjectDef.spawnableMapObject = new SpawnableOutsideObjectWithRarity
+                {
+                    spawnableObject = ScriptableObject.CreateInstance<SpawnableOutsideObject>()
+                };
                 mapObjectDef.spawnableMapObject.spawnableObject.prefabToSpawn = mapObject;
                 
                 MapObjects.RegisterOutsideObject(mapObjectDef, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, Mathf.Clamp(config.SpawnAmount, 0, 1000))));

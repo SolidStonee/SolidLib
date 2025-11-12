@@ -15,7 +15,7 @@ namespace SolidLib.Utils.AssetLoading
 
     public class AssetBundleLoader
     {
-        public static readonly Dictionary<string, AssetBundle> LoadedBundles = [];
+        public static readonly Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();
         
         public AssetBundle Bundle { get; private set; }
 

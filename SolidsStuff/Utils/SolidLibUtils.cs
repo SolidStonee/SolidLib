@@ -41,7 +41,7 @@ namespace SolidLib.Utils
                 return;
             }
 
-            GameObject go = Instantiate(item.spawnPrefab, position + Vector3.up, Quaternion.identity, StartOfRound.Instance.propsContainer.transform);
+            GameObject go = Instantiate(item.spawnPrefab, position + Vector3.up, Quaternion.identity, StartOfRound.Instance.propsContainer);
             go.GetComponent<NetworkObject>().TrySetParent(StartOfRound.Instance.propsContainer);
             go.GetComponent<NetworkObject>().Spawn();
             go.GetComponent<NetworkObject>().TrySetParent(StartOfRound.Instance.propsContainer);
@@ -59,9 +59,8 @@ namespace SolidLib.Utils
 
         private void CompleteSpawn(ulong requestId, GameObject go)
         {
-            if (pendingSpawns.TryGetValue(requestId, out var callback))
+            if (pendingSpawns.Remove(requestId, out var callback))
             {
-                pendingSpawns.Remove(requestId);
                 callback?.Invoke(go);
             }
         }

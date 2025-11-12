@@ -9,22 +9,16 @@ namespace SolidLib.Registry
 
         public void Register(string name, T key)
         {
-            if (_registry.ContainsKey(name))
+            if (!_registry.TryAdd(name, key))
             {
                 SolidLib.Log.LogWarning($"[Registry] Registry with name {name} is already registered.");
                 return;
             }
-            _registry[name] = key;
         }
 
         public bool Contains(string name)
         {
-            if (_registry.ContainsKey(name))
-            {
-                return true;
-            }
-
-            return false;
+            return _registry.ContainsKey(name);
         }
 
         public T Get(string name)

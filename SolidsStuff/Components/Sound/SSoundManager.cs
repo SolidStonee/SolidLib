@@ -60,7 +60,7 @@ namespace SolidLib.Components.Sound
             return handle;
         }
 
-        private AudioClip GetAudioClipFromNameRegistrar(string clipName)
+        public static AudioClip GetAudioClipFromNameRegistrar(string clipName)
         {
             if (!Registries.SoundRegistry.TryGetValue(clipName, out AudioClip clip))
             {

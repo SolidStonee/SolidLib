@@ -8,6 +8,7 @@ namespace SolidLib.Components
 
     public class API_FootStepSurface : MonoBehaviour
     {
+        [Header("UNUSED ATM")]
         [Tooltip("Footsteps")]
         public AudioClip[] clips;
 
